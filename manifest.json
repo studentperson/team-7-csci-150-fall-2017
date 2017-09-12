@@ -1,0 +1,37 @@
+{
+
+	“name”: “Cryptoid”,
+	“version”: “1.0”,
+	“manifest_version”: 1,
+
+
+	“description”: “Email Encryption”,
+	“icons”: {…},
+	
+
+	
+  	“browser_action”: {...},
+
+
+  	// Add any of these that we need or remove what we don’t need
+  	"background_page": "aFile.html",
+  	"chrome_url_overrides": {...},
+  	"content_scripts": [...],
+  	"content_security_policy": "policyString",
+  	"file_browser_handlers": [...],
+  	"homepage_url": "http://path/to/homepage",
+  	"incognito": "spanning" or "split",
+  	"key": "publicKey",
+  	"minimum_chrome_version": "versionString",
+  	"nacl_modules": [...],
+  	"offline_enabled": true,
+  	"omnibox": { "keyword": "aString" },
+  	"options_page": "aFile.html",
+  	"permissions": [...],
+  	"plugins": [...],
+	"update_url": "http://path/to/updateInfo.xml"
+
+}
+
+
+  	
