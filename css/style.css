@@ -1,0 +1,27 @@
+html,
+body {
+    height: 100%;
+    background-color: black;
+}
+.text_entry {
+    background-color: #c9c9c9;
+    border: none;
+    text-decoration: none;
+    font-size: 12px;
+}
+.button {
+    background-color: #666666; /* Gray */
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+.float_left {
+    float: left;
+}
+.float_right {
+    float: right;
+}
