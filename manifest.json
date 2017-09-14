@@ -5,9 +5,8 @@
 	“manifest_version”: 1,
 
 
-	“description”: “Email Encryption”,
-	“icons”: {…},
-	
+	“description”: “Easy Email Encryption”,
+	"icons": {"128": "img/cryptoid128.png"},	
 
 	
   	“browser_action”: {...},
