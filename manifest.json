@@ -1,7 +1,7 @@
 {
 
-	"name": "Cryptoid",
-	"version": "1.0",
+	"name": "Cryptoid Mail",
+	"version": "0.0.0.1",
 	"manifest_version": 2,
 
 
@@ -15,12 +15,22 @@
 	"default_popup": "manual.html"
 },
 
+	"background": {"page": "background.html"},
+	
+	"content_scripts": [
+		{
+			"matches": ["https://mail.google.com/mail/*"],
+			"js": ["js/host_gmail.js", "js/utils.js"]
+		}
+	],
 
   	// Add any of these that we need or remove what we don’t need
-		"permissions": [
-			"clipboardRead",
-			"clipboardWrite",
-			"contextMenus",
-			"cookies"]
+	"permissions": [
+	"activeTab",
+	"identity",
+	"clipboardRead",
+	"clipboardWrite",
+	"contextMenus",
+	"cookies"]
 
 }
