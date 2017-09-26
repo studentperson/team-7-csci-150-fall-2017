@@ -20,11 +20,6 @@ function sendEncrypt(obj)
 	chrome.tabs.executeScript({code:"context_retrieveMessage()"});
 }
 
-function sendEncryptAll(obj)
-{
-	chrome.tabs.executeScript({code:"getMessages()"});
-}
-
 ////////////////////////////////////////////
 ////////////Message listeners///////////////
 ////////////////////////////////////////////
