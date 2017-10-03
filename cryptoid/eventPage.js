@@ -19,6 +19,6 @@ chrome.contextMenus.onClicked.addListener(function(chooseText){
 });
 
 chrome.storage.onChanged.addListener(function(changes, storageName){
-    chrome.browserAction.setBadgeText({"text": changes.total.newValue.toString()});
+    chrome.browserAction.setBadgeText({"text": changes.mbody.newValue.toString()});
 });
 
