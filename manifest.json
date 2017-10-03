@@ -30,6 +30,8 @@
   	"permissions": [...],
   	"plugins": [...],
 	"update_url": "http://path/to/updateInfo.xml"
+	
+	//testing changes
 
 }
 
