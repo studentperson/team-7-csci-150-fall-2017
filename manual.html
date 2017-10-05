@@ -1,28 +1,46 @@
 <html>
+
+<head>
+	<title>Cryptoid Mail</title>
+	<link href="css/style.css" rel="stylesheet">
+</head>
+
+
+<body>
+	<div class="error" id="error"></div>
+	<form class="login" id="login">
+		Username: <input type="text" name="usrname" id="usrname"><br>
+		Password: <input type="password" name="pass" id="password"><br>
+		<div id="confirm" hidden>
+			Confirm: <input type="password" name="pass" id="confirmpass"><br>
+		</div>
+		<input class="button float_right" type="button" id="loginbtn" value="Login">
+		<input class="button float_left" type="button" id="register" value="Register">
+	</form>
 	
-	<head>
-		<title>Cryptoid Mail</title>
-		<link href="css/style.css" rel="stylesheet">
-	</head>
+	<form class="main_menu" id="main_menu" hidden>
+		<input class="menu_button" type="button" id="detect" value="Detect Email"><br>
+		<div>
+			<input class="menu_button" type="button" id="select" value="Encrypt Selected">
+			<input type="text" id="selRecipient" placeholder="To:" hidden><br>
+		</div>
+		<input class="menu_button" type="button" id="raw" value="Raw Message Input"><br>
+		<input class="button float_right" type="button" id="logout" value="Logout">
+	</form>
 	
-	
-	<body>
-		<img scr="img/lockedmail.png" height=200px>
-		<form class="encryption center">
-			<!--add key area/auto detect key-->
-			<!--auto detect text?-->
-			<textarea class="text_entry" id="mbody" placeholder="Message Body" col = "256" rows = "4"></textarea>
-			<br>
-			<br>
-			<input class="button float_right" type="button" id="encrypt" value="Encrypt" height = "32">
-			<input class="button float_left" type="button" id="decrypt" value="Decrypt" height = "32">
-		</form>
-	</body>
-	
-<<<<<<< HEAD
-	<script data-main="scripts/popup.js" src="scripts/require.js"></script>
-=======
-	<script data-main="scripts/popup.js" src="scripts/require.js">
->>>>>>> 537b96feadd3a701e8cdb71579e766014bbb3a7e
+	<form class="manual encryption center" id="manual" hidden>
+		<!--add key area/auto detect key-->
+		<!--auto detect text?-->
+		<input type="text" id="manRecipient" placeholder="To:"><br>
+		<textarea class="text_entry" id="mbody" placeholder="Message Body" col="256" rows="4"></textarea>
+		<br>
+		<br>
+		<input class="button float_right" type="button" id="encrypt" value="Encrypt" height="32">
+		<input class="button float_left" type="button" id="decrypt" value="Decrypt" height="32">
+	</form>
+</body>
+<script src="js/menu.js"></script>
+
+<script data-main="scripts/popup.js" src="scripts/require.js"></script>
 
 </html>

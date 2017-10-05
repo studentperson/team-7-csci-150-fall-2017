@@ -1,6 +1,13 @@
 html,
 body {
+    background-color: #666666;
+}
+form {
+    width: 350px;
     background-color: black;
+    color: white;
+    overflow: hidden;
+    padding: 5px;
 }
 .text_entry {
     background-color: #c9c9c9;
