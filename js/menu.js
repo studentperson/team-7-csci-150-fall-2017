@@ -2,20 +2,22 @@
 //get forms
 var loginfrm = document.getElementById("login");
 var mainMenu = document.getElementById("main_menu");
-var manualEncrypt = document.getElementById("manual");
+var manualEncrypt = document.getElementById("manualEncrypt");
 var confirm = document.getElementById("confirm");
+var selInputDiv = document.getElementById("selInputDiv");
 //get buttons
 var loginbtn = document.getElementById("loginbtn");
 var register = document.getElementById("register");
 var logout = document.getElementById("logout");
 var detect = document.getElementById("detect");
-var select = document.getElementById("select");
-var raw = document.getElementById("raw");
+var selectbtn = document.getElementById("selbtn");
+var manual = document.getElementById("manual");
+var selEntry = document.getElementById("selEntry");
 //get inputs
 var username = document.getElementById("usrname");
 var password = document.getElementById("password");
 var confirmpass = document.getElementById("confirmpass");
-var mbody = document.getElementById("mbody");
+var manBody = document.getElementById("manBody");
 var manRecipient = document.getElementById("manRecipient");
 var selRecipient = document.getElementById("selRecipient");
 
@@ -65,11 +67,11 @@ logout.addEventListener("click", function(){
     mainMenu.style.display = "none";
 });
 
-raw.addEventListener("click", function(){
+manual.addEventListener("click", function(){
    console.log("raw");
    mainMenu.style.display = "none";
    manualEncrypt.style.display = "block";
-   var encrypted = encrypt(manRecipient.value, mbody.value);
+   var encrypted = encrypt(manRecipient.value, manBody.value);
 });
 
 detect.addEventListener("click", function(){
@@ -79,14 +81,20 @@ detect.addEventListener("click", function(){
     
 });
 
-select.addEventListener("click", function(){
-    //get slected text ask for recipient and encrypt
+selectbtn.addEventListener("click", function(){
+    selectbtn.style.display = "none";
+    selInputDiv.style.display = "block";
+});
+
+selEntry.addEventListener("click", function(){
     var message = "Replace me with selected text";
     var recipient = selRecipient.value;
     //var encrypted = encrypt(recipient, message);
-})
+    selectbtn.style.display = "block";
+    selInputDiv.style.display = "none";
+});
 
-function registerUsr(username, password) {
+function registerUsr(username) {
     var success = true;
     return success;
 }
@@ -94,7 +102,7 @@ function loginUsr(username, password) {
     var success = true;
     return success;
 }
-function encrypt(recipient, message) {
+function encrypt(recipient, message) {//move to background
     //do the encryption
     return "encrypted text";
 }
