@@ -1,4 +1,11 @@
 ////////////////////////////////////////////
+///////////////User Variables///////////////
+////////////////////////////////////////////
+var privkey, pubkey; //Unencrypted private and public keys for this user
+var username; //The email of the current user
+var keepLogin; //Whether or not this user should remain logged in on session termination
+
+////////////////////////////////////////////
 ///////////////OpenPGP Setup////////////////
 ////////////////////////////////////////////
 var openpgp; //Reference object for all openPGP code
@@ -8,7 +15,7 @@ function setup_PGP()
 	//Loads code for OpenPGP functionality
 	requirejs(['openpgp'], function (obj) {
 		openpgp = obj;
-		chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*"]});
+		chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*", "https://mg.mail.yahoo.com/*"]});
 	});
 }
 
@@ -52,7 +59,43 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 				chrome.tabs.sendMessage(tabs[0].id, messageObject);
 			});
 			
-			
 		break;
 	}
 });
+
+//Gets the popup window
+function getPopup()
+{
+	return(chrome.extension.getViews({type:'popup'})[0]);
+}
+
+////////////////////////////////////////////
+/////////////User Registration//////////////
+////////////////////////////////////////////
+
+//The initiating function for each step is shown
+//Add any additional functions as needed
+
+//Step 2
+function reg_checkEmailAvailable()
+{
+	
+}
+
+//Step 3
+function reg_generateKeys()
+{
+	
+}
+
+//Step 4
+function reg_testKeys()
+{
+	
+}
+
+//Step 5
+function reg_UploadPublic()
+{
+	
+}
