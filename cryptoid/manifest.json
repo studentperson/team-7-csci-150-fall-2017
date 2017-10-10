@@ -1,0 +1,28 @@
+{
+	"manifest_version": 2,
+	"name": "Cryptoid Mail",
+	"version": "0.001",
+	
+	"description": "User-friendly email encryption utility",
+	"icons": {"128": "cryptoid128.png"},
+	
+	"browser_action": {
+		"default_icon": "cryptoid128.png",
+		"default_title": "Cryptoid Mail",
+		"default_popup": "popup.html"
+    },
+    
+    "background": {
+        "scripts": ["eventpage.js"],
+        "persistent": false
+    },
+	
+	"permissions": [
+	"storage",
+	"clipboardRead",
+	"clipboardWrite",
+	"contextMenus",
+	"cookies"]
+	
+	
+}
