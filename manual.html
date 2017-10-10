@@ -1,21 +1,55 @@
 <html>
 
-	<head>
-		<title>Cryptoid Mail</title>
-		<link href="css/style.css" rel="stylesheet">
-	</head>
+<head>
+	<title>Cryptoid Mail</title>
+	<link href="css/style.css" rel="stylesheet">
+</head>
+
+
+<body>
+	<div class="error" id="error"></div>
 	
 	
-	<body>
-		<form>
-				<textarea class="text_entry" id="mbody" placeholder="Message Body" col = "256" rows = "4"></textarea>
-				<br>
-				<br>
-				<input class="button float_right" type="button" id="encrypt" value="Encrypt" height = "32">
-				<input class="button float_left" type="button" id="decrypt" value="Decrypt" height = "32">
-		</form>
-	</body>
-	<script src="js/encrypt.js"></script>
-	<script src="js/popup.js"></script>
+	<form class="login" id="login">
+		Username: <input type="text" name="usrname" id="usrname"><br>
+		Password: <input type="password" name="pass" id="password"><br>
+		<div id="confirm" hidden>
+			Confirm: <input type="password" name="pass" id="confirmpass"><br>
+		</div>
+		<input class="button float_right" type="button" id="loginbtn" value="Login">
+		<input class="button float_left" type="button" id="register" value="Register">
+	</form>
+	
+	
+	<form class="main_menu" id="main_menu" hidden>
+		<input class="menu_button" type="button" id="detect" value="Detect Email"><br>
+		<div>
+			<input class="menu_button" type="button" id="selbtn" value="Encrypt Selected">
+			<div id="selInputDiv" hidden>
+				<input type="text" id="selRecipient" placeholder="To:"><br>
+				<input class="button float_right" type="button" id="selEntry" value="Encrypt"><br>
+			</div>
+		</div>
+		<input class="menu_button" type="button" id="manual" value="Manual Message Input"><br>
+		<input class="button float_right" type="button" id="logout" value="Logout">
+	</form>
+	
+	
+	<form class="manual encryption center" id="manualEncrypt" hidden>
+		<!--add key area/auto detect key-->
+		<!--auto detect text?-->
+		<input type="text" id="manRecipient" placeholder="To:"><br>
+		<textarea class="text_entry" id="manBody" placeholder="Message Body" col="256" rows="4"></textarea>
+		<br>
+		<br>
+		<input class="button float_right" type="button" id="encrypt" value="Encrypt" height="32">
+		<input class="button float_left" type="button" id="decrypt" value="Decrypt" height="32">
+	</form>
+	
+	
+</body>
+<script src="js/menu.js"></script>
+
+<script data-main="scripts/popup.js" src="scripts/require.js"></script>
 
 </html>
