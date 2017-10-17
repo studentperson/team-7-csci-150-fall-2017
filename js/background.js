@@ -77,8 +77,11 @@ function getPopup()
 //Add any additional functions as needed
 
 //Step 2
-function reg_checkEmailAvailable()
+function reg_checkEmailAvailable(userEmail)
 {
+  var serverURL = "192.241.239.122:8888"
+  var userEmail = "colebee@mail.fresnostate.edu"
+
 	
 }
 
