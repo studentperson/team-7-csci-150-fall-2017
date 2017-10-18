@@ -14,8 +14,9 @@
 		</div>
 	</div>
 	
-	
 	<form class="login center" id="login">
+	<div class="error" id="error"></div>
+	<form class="login" id="login">
 		Username: <input type="text" name="usrname" id="usrname"><br>
 		Password: <input type="password" name="pass" id="password"><br>
 		<div id="confirm" hidden>
@@ -38,7 +39,6 @@
 		<input class="menu_button" type="button" id="manual" value="Manual Message Input"><br>
 	</form>
 	
-	
 	<form class="manual encryption center" id="manualEncrypt" hidden>
 		<!--add key area/auto detect key-->
 		<!--auto detect text?-->
@@ -53,7 +53,6 @@
 	
 	<div class="error center" id="error"></div>
 </body>
-
 <script src="js/menu.js"></script>
 <script data-main="scripts/popup.js" src="scripts/require.js"></script>
 
