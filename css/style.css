@@ -42,10 +42,6 @@ form {
 }
 .header {
     width: 350px;
-=======
-form {
-    width: 350px;
->>>>>>> a9804b0e5ee381935c367bcdc1197f7598c1898a
     background-color: black;
     color: white;
     overflow: hidden;
@@ -63,11 +59,7 @@ form {
     background-color: #666666; /* Gray */
     border: none;
     color: white;
-<<<<<<< HEAD
     padding: 5px;
-=======
-    padding: 10px;
->>>>>>> a9804b0e5ee381935c367bcdc1197f7598c1898a
     text-align: center;
     text-decoration: none;
     display: inline-block;
