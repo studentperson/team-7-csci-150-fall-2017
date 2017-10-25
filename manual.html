@@ -1,21 +1,30 @@
 <html>
 
+	<!--
+	This is highly outdated, it is mainly for committing
+	-->
 	<head>
 		<title>Cryptoid Mail</title>
-		<link href="css/style.css" rel="stylesheet">
 	</head>
 	
 	
 	<body>
-		<form>
-				<textarea class="text_entry" id="mbody" placeholder="Message Body" col = "256" rows = "4"></textarea>
-				<br>
-				<br>
-				<input class="button float_right" type="button" id="encrypt" value="Encrypt" height = "32">
-				<input class="button float_left" type="button" id="decrypt" value="Decrypt" height = "32">
-		</form>
+	<form>
+			<textarea id="mbody" placeholder="Message Body" col = "512" rows = "8"></textarea>
+			<br>
+			<br>
+			<input type="button" id="encrypt" value="Encrypt" height = "32">
+			<input type="button" id="decrypt" value="Decrypt" height = "32">
+			<input type="button" id="genkeys" value="GenKeys" height = "32">
+	</form>
 	</body>
 	
-	<script data-main="scripts/popup.js" src="scripts/require.js">
+	<script src="js/openpgp.js">
+	
+	</script>
+	
+	<script src="js/popup.js">
+	
+	</script>
 
 </html>
