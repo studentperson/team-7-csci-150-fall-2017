@@ -2,6 +2,8 @@
 
 
 #### Setting up developer environment
+This was set up using a [Chrome Extension generator](https://github.com/yeoman/generator-chrome-extension).
+
 ```
 # Please make sure that `yo`, `gulp` and `bower` was installed on your system using this command:
 npm install --global yo gulp-cli bower
