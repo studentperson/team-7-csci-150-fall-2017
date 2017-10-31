@@ -46,14 +46,6 @@ form {
     overflow: hidden;
     padding: 5px;
 }
-.text_entry {
-    background-color: #c9c9c9;
-    width: 90%;
-    margin-left: 5%;
-    border: none;
-    text-decoration: none;
-    font-size: 12px;
-}
 .button {
     background-color: #666666; /* Gray */
     border: none;
@@ -87,6 +79,10 @@ form {
     font-size: 12px;
     width: 250px;
 }
+.toFrom {
+  width: 75%;
+  margin: 5px;
+}
 .selInputDiv {
     margin: 5px;
     overflow: auto;
@@ -99,6 +95,9 @@ form {
 .float_right {
     float: right;
     margin-left: 10px;
+}
+.include-float {
+  overflow: auto
 }
 .center {
     margin: auto;

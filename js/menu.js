@@ -12,6 +12,8 @@ allforms.push(confirm);
 var selInputDiv = document.getElementById("selInputDiv");
 allforms.push(selInputDiv);
 var header = document.getElementById("header");
+allforms.push(header);
+var errorDiv = document.getElementById("error");
 //get buttons
 var loginbtn = document.getElementById("loginbtn");
 var register = document.getElementById("register");
@@ -21,6 +23,8 @@ var selectbtn = document.getElementById("selbtn");
 var manual = document.getElementById("manual");
 var selEntry = document.getElementById("selEntry");
 var home = document.getElementById("home");
+var manEncrypt = document.getElementById("encrypt");
+var manDecrypt = document.getElementById("decrypt");
 //get inputs
 var username = document.getElementById("usrname");
 var password = document.getElementById("password");
@@ -31,17 +35,23 @@ var selRecipient = document.getElementById("selRecipient");
 ////Variables
 var isRegistering = false;
 var isLoggedin = false;
-
+//////////Goes to the main page if logged in//////////
 home.addEventListener("click", function() {
     for (var i in allforms) allforms[i].style.display = "none";
     //check if logged in
-    if (isLoggedin) mainMenu.style.display = "block";
+    if (isLoggedin) {
+        mainMenu.style.display = "block";
+        header.style.display = "block";
+        selectbtn.style.display = "block";
+        selInputDiv.style.display = "none";
+    }
     else loginform.style.display = "block";
+    sendError("");
 });
 
-
+//////////Logs in, basic check for valid email send password and email//////////
 loginbtn.addEventListener("click", function() {
-    console.log("login");
+    var error = "";
     //regex to check for basic valid email
     if (/\S+@\S+\.\S+/.test(username.value)) {
         if (isRegistering) {
@@ -50,8 +60,9 @@ loginbtn.addEventListener("click", function() {
                 isLoggedin = registerUsr(username.value, password.value);
             }
             else {
-                console.log("invalid password"); //put into error div
+                error = "Passwords do not match"; //put into error div
             }
+            confirmpass.value = "";
         }
         else {
             //send to login check
@@ -59,16 +70,18 @@ loginbtn.addEventListener("click", function() {
         }
     }
     else {
-        console.log("invalid email"); //put into error div
+        error = "Invalid Email"; //put into error div
     }
     if (isLoggedin) {
         loginform.style.display = "none";
         mainMenu.style.display = "block";
         header.style.display = "block";
+        password.value = "";
     }
+    sendError(error);
 });
 
-
+//////////Changes login to register//////////
 register.addEventListener("click", function() {
     isRegistering = !isRegistering;
     if (isRegistering) {
@@ -81,43 +94,67 @@ register.addEventListener("click", function() {
         register.setAttribute("value", "Register");
         loginbtn.setAttribute("value", "Login");
     }
+    sendError("");
 });
 
+//////////Logs user out//////////
 logout.addEventListener("click", function() {
     isLoggedin = false;
     //add logout function
+    for(var x = 0; x < allforms.length; x++) allforms[x].style.display = "none";
     loginform.style.display = "block";
-    mainMenu.style.display = "none";
-    header.style.display = "none";
+    sendError("");
 });
 
-
+//////////Opens the manual encryption input//////////
 manual.addEventListener("click", function() {
     mainMenu.style.display = "none";
     manualEncrypt.style.display = "block";
-    var encrypted = encrypt(manRecipient.value, manBody.value);
+    sendError("");
 });
 
+manEncrypt.addEventListener("click", function(){
+    if (/\S+@\S+\.\S+/.test(manRecipient.value)) {
+        encrypt(manRecipient.value, manBody.value);
+        sendError("");
+    } else sendError("Invalid Email")
+});
 
+manDecrypt.addEventListener("click", function(){
+    decrypt(username.value, manBody.value);
+    sendError("");
+});
+
+//////////Opens the email input for selected input//////////
 selectbtn.addEventListener("click", function() {
     selectbtn.style.display = "none";
     selInputDiv.style.display = "block";
+    sendError("");
 });
 
-
+//////////-----Add code to detect-----//////////
 detect.addEventListener("click", function() {
-    //detect the email body and recipient and encrypt or call function
+    //detect the email body and recipient and encrypt or call function----replace values
     var recipient = "email@recipient.thing";
     var message = "Replace me with email body";
-
+    var encrypted = encrypt(recipient, message);
+    sendError("");
 });
 
+//////////Sends email and selected text to encrypt//////////
 selEntry.addEventListener("click", function(){
     var message = "Replace me with selected text";
     var recipient = selRecipient.value;
-    //var encrypted = encrypt(recipient, message);
-    selectbtn.style.display = "block";
-    selInputDiv.style.display = "none";
+    if (/\S+@\S+\.\S+/.test(recipient)) {
+        var encrypted = encrypt(recipient, message);
+        selectbtn.style.display = "block";
+        selInputDiv.style.display = "none";
+        selRecipient.value = "";
+        sendError("");
+    } else {
+        console.log("invalid");
+        sendError("Invalid Email");
+    }
 });
 
 function registerUsr(username) {
@@ -132,5 +169,15 @@ function loginUsr(username, password) {
 
 function encrypt(recipient, message) {//move to background
     //do the encryption
-    return "encrypted text";
+    return "Encrypted text";
+}
+
+function decrypt(sender, message) {//move to background
+    //do the encryption
+    return "Decrypted text";
+}
+
+function sendError(error) {
+    if (error) errorDiv.innerHTML = "<p>" + error + "</p>";
+    else errorDiv.innerHTML = "";
 }

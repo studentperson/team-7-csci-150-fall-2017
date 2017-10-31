@@ -13,20 +13,24 @@
 			<input class="button float_right" type="button" id="logout" value="Logout">
 		</div>
 	</div>
-	
+
 	<form class="login center" id="login">
-	<div class="error" id="error"></div>
-	<form class="login" id="login">
-		Username: <input type="text" name="usrname" id="usrname"><br>
-		Password: <input type="password" name="pass" id="password"><br>
-		<div id="confirm" hidden>
-			Confirm: <input type="password" name="pass" id="confirmpass"><br>
+		<div class="include-float">
+			<div style="float:left; margin-left:20%;">Username:</div>
+			<input style="float:right; margin-right:20%;" type="text" name="usrname" id="usrname">
+			<div style="float:left; margin-left:20%;">Password:</div>
+			<input style="float:right; margin-right:20%;" type="password" name="pass" id="password"><br>
+			<div id="confirm" hidden>
+				Confirm: <input type="password" name="pass" id="confirmpass"><br>
+			</div>
 		</div>
-		<input class="button float_right" type="button" id="loginbtn" value="Login">
-		<input class="button float_left" type="button" id="register" value="Register">
+		<div>
+			<input class="button float_right" type="button" id="loginbtn" value="Login">
+			<input class="button float_left" type="button" id="register" value="Register">
+		</div>
 	</form>
-	
-	
+
+
 	<form class="main_menu center" id="main_menu" hidden>
 		<input class="menu_button" type="button" id="detect" value="Detect Email"><br>
 		<div>
@@ -38,20 +42,19 @@
 		</div>
 		<input class="menu_button" type="button" id="manual" value="Manual Message Input"><br>
 	</form>
-	
+
 	<form class="manual encryption center" id="manualEncrypt" hidden>
 		<!--add key area/auto detect key-->
 		<!--auto detect text?-->
-		<input type="text" id="manRecipient" placeholder="To:"><br>
-		<input type="text" id="manFrom" placeholder="From:"><br>
-		<textarea class="text_entry" id="manBody" placeholder="Message Body" col="256" rows="4"></textarea>
+		<input class = "input toFrom" type="text" id="manRecipient" placeholder="To:" style="margin-bottom:0px;"><br>
+		<input class = "input toFrom" type="text" id="manFrom" placeholder="From:"><br>
+		<textarea class="input" id="manBody" placeholder="Message Body" rows="4" style="width:100%;"></textarea>
 		<br>
 		<br>
 		<input class="button float_right" type="button" id="encrypt" value="Encrypt" height="32">
 		<input class="button float_left" type="button" id="decrypt" value="Decrypt" height="32">
 	</form>
-	
-	<div class="error center" id="error"></div>
+	<form class="error center" id="error"></form>
 </body>
 <script src="js/menu.js"></script>
 <script data-main="scripts/popup.js" src="scripts/require.js"></script>
