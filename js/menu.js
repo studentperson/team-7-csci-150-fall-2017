@@ -43,7 +43,6 @@ home.addEventListener("click", function() {
         mainMenu.style.display = "block";
         header.style.display = "block";
         selectbtn.style.display = "block";
-        selInputDiv.style.display = "none";
     }
     else loginform.style.display = "block";
     sendError("");
