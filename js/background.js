@@ -28,8 +28,17 @@ function setup_PGP()
 ////////////////////////////////////////////
 //////////////Include Utility///////////////
 ////////////////////////////////////////////
+var includeList = new Array();
+
 function include(file)
 {
+	for(var i = 0; i < includeList.length; i++)
+	{
+		if(includeList[i] == file)
+			return; //File is already included, escape
+	}
+	includeList.push(file);
+	
 	var tag = document.createElement("script");
 	tag.src = file;
 	document.head.appendChild(tag);
