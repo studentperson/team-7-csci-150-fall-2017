@@ -24,3 +24,10 @@ function getChildOfClass(node, mclass)
 	
 	return(null);
 }
+
+//Returns the view for the popup window
+function getPopup()
+{
+	return(chrome.extension.getViews({type:'popup'})[0]);
+}
+

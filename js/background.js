@@ -1,4 +1,12 @@
 ////////////////////////////////////////////
+//////////////File includes/////////////////
+////////////////////////////////////////////
+var includeList = new Array();
+
+include("js/utils.js");
+include("js/cache.js");
+
+////////////////////////////////////////////
 ///////////////User Variables///////////////
 ////////////////////////////////////////////
 var privkey, pubkey; //Unencrypted private and public keys for this user
@@ -17,6 +25,23 @@ function setup_PGP()
 		openpgp = obj;
 		chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*", "https://mg.mail.yahoo.com/*"]});
 	});
+}
+
+////////////////////////////////////////////
+//////////////Include Utility///////////////
+////////////////////////////////////////////
+function include(file)
+{
+	for(var i = 0; i < includeList.length; i++)
+	{
+		if(includeList[i] == file)
+			return; //File is already included, escape
+	}
+	includeList.push(file);
+	
+	var tag = document.createElement("script");
+	tag.src = file;
+	document.head.appendChild(tag);
 }
 
 ////////////////////////////////////////////
@@ -62,40 +87,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		break;
 	}
 });
-
-//Gets the popup window
-function getPopup()
-{
-	return(chrome.extension.getViews({type:'popup'})[0]);
-}
-
-////////////////////////////////////////////
-/////////////User Registration//////////////
-////////////////////////////////////////////
-
-//The initiating function for each step is shown
-//Add any additional functions as needed
-
-//Step 2
-function reg_checkEmailAvailable()
-{
-	
-}
-
-//Step 3
-function reg_generateKeys()
-{
-	
-}
-
-//Step 4
-function reg_testKeys()
-{
-	
-}
-
-//Step 5
-function reg_UploadPublic()
-{
-	
-}
