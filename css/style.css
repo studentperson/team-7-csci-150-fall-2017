@@ -2,6 +2,36 @@ html,
 body {
     background-color: #666666;
 }
+::-webkit-input-placeholder { /* Chrome */
+  color: lightgray;
+  transition: opacity 250ms ease-in-out;
+}
+:focus::-webkit-input-placeholder {
+  opacity: 0.5;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: lightgray;
+  transition: opacity 250ms ease-in-out;
+}
+:focus:-ms-input-placeholder {
+  opacity: 0.5;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: lightgray;
+  opacity: 1;
+  transition: opacity 250ms ease-in-out;
+}
+:focus::-moz-placeholder {
+  opacity: 0.5;
+}
+:-moz-placeholder { /* Firefox 4 - 18 */
+  color: lightgray;
+  opacity: 1;
+  transition: opacity 250ms ease-in-out;
+}
+:focus:-moz-placeholder {
+  opacity: 0.5;
+}
 form {
     width: 350px;
     background-color: black;
@@ -9,23 +39,54 @@ form {
     overflow: hidden;
     padding: 5px;
 }
-.text_entry {
-    background-color: #c9c9c9;
-    width: 90%;
-    margin-left: 5%;
-    border: none;
-    text-decoration: none;
-    font-size: 12px;
+.header {
+    width: 350px;
+    background-color: black;
+    color: white;
+    overflow: hidden;
+    padding: 5px;
 }
 .button {
     background-color: #666666; /* Gray */
     border: none;
     color: white;
-    padding: 10px;
+    padding: 5px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
+}
+.menu_button {
+    background-color: #666666; /* Gray */
+    border: none;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    width: 340px;
+}
+.input {
+    background-color: #666666; /* Gray */
+    border: none;
+    color: white;
+    margin: 0px;
+    padding: 5px;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    width: 250px;
+}
+.toFrom {
+  width: 75%;
+  margin: 5px;
+}
+.selInputDiv {
+    margin: 5px;
+    overflow: auto;
+    border: none;
 }
 .float_left {
     float: left;
@@ -35,7 +96,14 @@ form {
     float: right;
     margin-left: 10px;
 }
+.include-float {
+  overflow: auto
+}
 .center {
     margin: auto;
     padding: 10px;
+}
+.error {
+  color: red;
+  text-align: center;
 }
