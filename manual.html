@@ -1,8 +1,5 @@
 <html>
 
-	<!--
-	This is highly outdated, it is mainly for committing
-	-->
 	<head>
 		<title>Cryptoid Mail</title>
 	</head>
@@ -15,16 +12,34 @@
 			<br>
 			<input type="button" id="encrypt" value="Encrypt" height = "32">
 			<input type="button" id="decrypt" value="Decrypt" height = "32">
+			<input type="button" id="inpprivkey" value="Input Private Key" height="32">
+			<input type="button" id="inppubkey" value="Input Public Key" height="32">
+			<input type="button" id="inppword" value="Input Password" height="32">
 			<input type="button" id="genkeys" value="GenKeys" height = "32">
 	</form>
 	</body>
 	
+	<!--
 	<script src="js/openpgp.js">
-	
 	</script>
+
+	
+	Trying it without the worker
+	<script src="openpgp.worker.js">
+	</script>
+	
 	
 	<script src="js/popup.js">
-	
 	</script>
+	
+	<body onLoad="setup_PGP(function () {})">
+	</body>
+	setup_PGP1();
+	-->
+	
+	<script data-main="js/popup.js", src="js/require.js">
+
+	</script>
+	
 
 </html>
