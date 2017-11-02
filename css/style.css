@@ -103,3 +103,7 @@ form {
     margin: auto;
     padding: 10px;
 }
+.error {
+  color: red;
+  text-align: center;
+}

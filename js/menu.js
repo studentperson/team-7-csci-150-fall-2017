@@ -37,14 +37,7 @@ var isRegistering = false;
 var isLoggedin = false;
 //////////Goes to the main page if logged in//////////
 home.addEventListener("click", function() {
-    for (var i in allforms) allforms[i].style.display = "none";
-    //check if logged in
-    if (isLoggedin) {
-        mainMenu.style.display = "block";
-        header.style.display = "block";
-        selectbtn.style.display = "block";
-    }
-    else loginform.style.display = "block";
+    loadPage("main_menu");
     sendError("");
 });
 
@@ -179,4 +172,24 @@ function decrypt(sender, message) {//move to background
 function sendError(error) {
     if (error) errorDiv.innerHTML = "<p>" + error + "</p>";
     else errorDiv.innerHTML = "";
+}
+
+//////////Loads page baised on page ID//////////
+//if empty string just goes to home (login before calling)
+function loadPage(page) {
+    for (var i in allforms) {
+        if (page == allforms[i].id && isLoggedin) {
+            allforms[i].style.display = "block";
+        }
+        else allforms[i].style.display = "none";
+    }
+    //check if logged in
+    if (isLoggedin) {
+        if (page == "") {
+            mainMenu.style.display = "block";
+        }
+        header.style.display = "block";
+        selectbtn.style.display = "block";
+    }
+    else loginform.style.display = "block";
 }

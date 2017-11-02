@@ -16,13 +16,16 @@
 
 	<form class="login center" id="login">
 		<div class="include-float">
-			<div style="float:left; margin-left:20%;">Username:</div>
-			<input style="float:right; margin-right:20%;" type="text" name="usrname" id="usrname">
-			<div style="float:left; margin-left:20%;">Password:</div>
-			<input style="float:right; margin-right:20%;" type="password" name="pass" id="password"><br>
+			<h1 style="color:gray;margin-left:10%;">Login:</h1>
+			<div style="float:left; margin-left:20%;">Email:</div></br>
+			<input class="input" style="margin-left:10%;width:80%;" type="text" name="usrname" id="usrname">
+			<div style="float:left; margin-left:20%;">Password:</div></br>
+			<input class="input" style="margin-left:10%;width:80%;" type="password" name="pass" id="password"><br>
 			<div id="confirm" hidden>
-				Confirm: <input type="password" name="pass" id="confirmpass"><br>
+				<div style="float:left; margin-left:20%;">Confirm:</div></br>
+				<input class="input" style="margin-left:10%;width:80%;" type="password" name="confirm" id="confirmpass"><br>
 			</div>
+			</br></br>
 		</div>
 		<div>
 			<input class="button float_right" type="button" id="loginbtn" value="Login">
