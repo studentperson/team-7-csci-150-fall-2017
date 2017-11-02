@@ -1,4 +1,10 @@
 ////////////////////////////////////////////
+//////////////File includes/////////////////
+////////////////////////////////////////////
+include("js/utils.js");
+include("js/cache.js");
+
+////////////////////////////////////////////
 ///////////////User Variables///////////////
 ////////////////////////////////////////////
 var privkey, pubkey; //Unencrypted private and public keys for this user
@@ -72,77 +78,3 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		break;
 	}
 });
-
-//Gets the popup window
-function getPopup()
-{
-	return(chrome.extension.getViews({type:'popup'})[0]);
-}
-
-////////////////////////////////////////////
-/////////////User Registration//////////////
-////////////////////////////////////////////
-
-//The initiating function for each step is shown
-//Add any additional functions as needed
-
-//Step 2
-function reg_checkEmailAvailable()
-{
-	
-}
-
-//Step 3
-function reg_generateKeys()
-{
-	
-}
-
-//Step 4
-function reg_testKeys()
-{
-	var uname = document.getElementById('usrame').value;
-	
-	privKey = localStorage.getItem(uname + '_privKey');
-	pubKey = localStorage.getItem(uname + '_pubKey');
-	
-	reg_testKeys_encrypt();
-}
-
-function reg_testKeys_encrypt()
-{	
-	var options = {
-		data: 'Cryptoid Mail - The Best Email Encryption Utility in CSCI 150',
-		publicKeys: openpgp.key.readArmored(pubkey).keys
-	};
-	
-	openpgp.encrypt(options).then(function(ciphertext) {
-		reg_testKeys_decrypt(ciphertext.data);
-	});
-}
-
-function reg_testKeys_decrypt(str)
-{
-	var pword = document.getElementById('password').value;
-	
-	var privKeyObj = openpgp.key.readArmored(privkey).keys[0];
-	privKeyObj.decrypt(pword);
-	
-	options = {
-		message: openpgp.message.readArmored(str),
-		privateKey: privKeyObj
-	};
-	
-	openpgp.decrypt(options).then(function(plaintext) {
-		if(plaintext == 'Cryptoid Mail - The Best Email Encryption Utility in CSCI 150')
-			reg_UploadPublic(); //Success
-		else
-			reg_generateKeys(); //Fail
-	});
-}
-
-//Step 5
-function reg_UploadPublic()
-{
-	
-}
