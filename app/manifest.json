@@ -10,7 +10,10 @@
   "background": {
     "scripts": [
       "scripts/chromereload.js",
-      "scripts/background.js"
+      "scripts/background.js",
+      "scripts/check_email.js",
+      "scripts/get_pubkey.js",
+      "scripts/upload_key.js"
     ]
   },
   "permissions": [
