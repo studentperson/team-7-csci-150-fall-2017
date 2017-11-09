@@ -23,9 +23,9 @@ function encryptm (privkey, pubkey, message):String
 
 //I added 'm' at the end to keep the function unique
 	
-//functionality: decrypt message with private key
+//functionality: decrypt message with private key, and public key
 //returns decrypted message
-function decryptm (privkey, message):String
+function decryptm (privkey, pubkey, message):String
 {
 		
 }
