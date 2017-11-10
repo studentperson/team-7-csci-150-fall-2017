@@ -1,5 +1,5 @@
 // Example inputs
-// var keyServer = 'http://192.241.239.122:8888';
+var keyServer = 'http://192.241.239.122:8888';
 // var pubKey = '-----BEGIN PGP PUBLIC KEY BLOCK-----\n' +
 // '\n' +
 // 'mQENBFn9JDgBCACoyh59TpQsGxMk675i+Hfk/kbKxWiPafB7m1C5Sts4cmRcpQTo\n' +
