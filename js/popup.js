@@ -1,16 +1,15 @@
-var key00 = 1;
-
+//var openpgp = window.openpgp;
 var openpgp;
-var privkey;
-var pubkey;
+var gprivkey;
+var gpubkey;
+var gpword;
+var gemessage;
+var gdmessage;
+var gkeyobj;
+var gemail;
+var gprivkeyobj;
 
-var tpword;
-var encrypted;
-
-var privk_decrypt00;
-var privk_decrypt01;
-var test00;
-
+//var privKeyObj;
 var funcdone = false;
 
 var messageBox = document.getElementById("mbody");
@@ -22,7 +21,7 @@ function setup_PGP(callback)
 	requirejs(['openpgp'], function (obj) {
 		openpgp = obj;
 		openpgp.config.aead_protect = true // activate fast AES-GCM mode (not yet OpenPGP standard)
-
+		//chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*"]});
 		callback();
 		funcdone  = true;
 		messageBox.value = "openpgp loaded";
@@ -36,56 +35,117 @@ function setup_PGP1()
 	requirejs(['openpgp'], function (obj) {
 		openpgp = obj;
 		openpgp.config.aead_protect = true // activate fast AES-GCM mode (not yet OpenPGP standard)
-
+		//chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*"]});
 		funcdone  = true;
 		messageBox.value = "openpgp loaded";
 	});
 }
 
-var dummytest00 = setup_PGP1();
+//var dummytest00 = 
+setup_PGP1();
 
+/*
+window.onload = function() {
+	messageBox.value = "testload";
+  setup_PGP(function () {});
+};
+
+document.addEventListener("DOMContentLoaded", function() {
+  you_function(...);
+});
+*/
 
 document.addEventListener("DOMContentLoaded", function() {
   setup_PGP(function () {});
 });
 
-function manencrypt() {
+function manencrypt() 
+{
 	
+	var tmessage;
+	
+	tmessage = "Hello world.";
+	
+	gemessage = encryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
+	
+	//messageBox.value = gemessage;
+}
+
+//function encryptm (privkey, pubkey, message)
+function encryptm (inp_privkobj, pubkey, message)
+{
 	if (funcdone)
 	{
 		funcdone = false;
 		
-		var messageText = messageBox.value;
+		//var messageText = messageBox.value;
 		
 		var options;
-
+		
+		//tpword = 'nmpassword0123';
 		
 		var privKeyObj;
 		
+		var encrypted;
+		
+		privKeyObj = inp_privkobj;
+		
+		/*
 		privKeyObj = openpgp.key.readArmored(privkey).keys[0];
 		privKeyObj.decrypt(tpword);
+		*/
 		
 		options = {
 			//data: 'Hello, World!',                             // input as String (or Uint8Array)
-			data: messageText,
+			data: message,
 			publicKeys: openpgp.key.readArmored(pubkey).keys,  // for encryption
 			privateKeys: privKeyObj // for signing (optional)
 		};
 		messageBox.value = "encrypting...\n";
 		openpgp.encrypt(options).then(function(ciphertext) {
 			encrypted = ciphertext.data; // '-----BEGIN PGP MESSAGE ... END PGP MESSAGE-----'
+			
+			/*
+			messageBox.value = encrypted;
+			funcdone = true;
+			
+			return encrypted;
+			*/
+			
 		}).then(		
 		function()
 		{
+			
 			messageBox.value = encrypted;
 			funcdone = true;
+			
+			gemessage = encrypted;
+			
+			//return encrypted;
+			
 		});
 	}
 	else
 		messageBox.value = "function not complete\n";
+	
+	return encrypted;
+	
 }
 
-function mandecrypt() {
+function mandecrypt() 
+{
+	var tmessage;
+	
+	tmessage = gemessage;
+	
+	gdmessage = decryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
+	
+	//messageBox.value = gdmessage;
+}
+
+//function decryptm (privkey, pubkey, message)
+function decryptm (inp_privkobj, pubkey, message)
+{
 	
 	if (funcdone)
 	{
@@ -97,11 +157,17 @@ function mandecrypt() {
 
 		var privKeyObj;
 		
+		privKeyObj = inp_privkobj;
+		
+		/*
 		privKeyObj = openpgp.key.readArmored(privkey).keys[0];
 		privKeyObj.decrypt(tpword);
+		*/
+		
+		
 		
 		options = {
-			message: openpgp.message.readArmored(encrypted),     // parse armored message
+			message: openpgp.message.readArmored(message),     // parse armored message
 			publicKeys: openpgp.key.readArmored(pubkey).keys,    // for verification (optional)
 			privateKey: privKeyObj // for decryption
 		};
@@ -114,90 +180,135 @@ function mandecrypt() {
 		{
 			messageBox.value = decrypted;			
 			funcdone = true;
+			
+			return decrypted;
 		});
 	}
 	else
 		messageBox.value = "function not complete\n";
+	
+	//return decrypted;
 }
 
 function testKeyGen() 
 {
+	var tpword00;
+	var temail00;
+	var tkeyobj;
+	tpword00 = "password";
+	temail00 = "someone@example.com";
+	
+	tkeyobj = generateKeypair (temail00, tpword00);
+	gkeyobj = tkeyobj;
+	gpword = tpword00;
+	
+	//gprivkeyobj = decryptPrivateKey (gkeyobj.privatekey, gpword);
+	
+	
+}
+
+function generateKeypair (femail, pword)
+{
+	ret_keys = new Object();
 	if (funcdone)
 	{
+		var pubkey;
+		var privkey;
+		var ret_keys;
 		funcdone = false;
 		
-		tpword = messageBox.value;
+		//tpword = messageBox.value;
 
 		messageBox.value = "setting up pgp...\n";
-		
+
 
 			var options = {
-				userIds: [{ name:'NM_test_00'}], // multiple user IDs
+				//userIds: [{ name:'NM_test_00'}], // multiple user IDs
+				//userIds: [{ name:'Jon Smith', email:'jon@example.com' }], // multiple user IDs
+				userIds: [{ email:femail }], // multiple user IDs
 				numBits: 4096,                                            // RSA key size
-				passphrase: tpword         // protects the private key
+				passphrase: pword         // protects the private key
 			};
 			messageBox.value = "generating keys...\n";
 
 			openpgp.generateKey(options).then(function(newkey) {
 				privkey = newkey.privateKeyArmored; // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
 				pubkey = newkey.publicKeyArmored;   // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
-				test00 = newkey;
 			}).then(function()
 			{
+				ret_keys.privatekey = privkey;
+				ret_keys.publickey = pubkey;
 				messageBox.value = pubkey;
 				funcdone = true;
-				
-				var privKeyObj;
-		
-				privKeyObj = openpgp.key.readArmored(privkey).keys[0];
-				privKeyObj.decrypt(tpword);
-				
-				privk_decrypt00 = privKeyObj;
-				privk_decrypt01 = privKeyObj.privateKeyArmored;
 			});
-		
 	}
 	else
 		messageBox.value = "function not complete\n";
 
 
+	return ret_keys;
 }
 
+//returns the private key as an object
+function decryptPrivateKey (inp_privkey, inp_pword)
+{
+		var privKeyObj;
+		privKeyObj = openpgp.key.readArmored(inp_privkey).keys[0];
+		privKeyObj.decrypt(inp_pword);
+		//need to convert the decrypted object into a string
+		
+		return privKeyObj;
+}
+
+//currently defunct
 function maniprkey()
 {	
+
+messageBox.value = "not in use";
+/*
 	if (funcdone)
 	{
 		funcdone = false;
-	
+		
+		
 		privkey = messageBox.value;
 	
+		//should be callback
 		funcdone = true;
 	}
 	else
 		messageBox.value = "function not complete\n";
+*/
 }
 
 function manipbkey()
 {
+	messageBox.value = "not in use";
+	/*
 	if (funcdone)
 	{
 		funcdone = false;
 	
 		pubkey = messageBox.value;
 	
+		//should be callback
 		funcdone = true;
 	}
 	else
 		messageBox.value = "function not complete\n";
+	*/
 }
 
+//get the private key object
 function manipw()
 {
 	if (funcdone)
 	{
 		funcdone = false;
 	
-		tpword = messageBox.value;
+		gprivkeyobj = decryptPrivateKey (gkeyobj.privatekey, gpword);
+	
+		//tpword = messageBox.value;
 	
 		//should be callback
 		funcdone = true;
