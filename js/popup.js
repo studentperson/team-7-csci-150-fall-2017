@@ -1,13 +1,16 @@
 var key00 = 1;
 
-//var openpgp = window.openpgp;
 var openpgp;
 var privkey;
 var pubkey;
 
 var tpword;
 var encrypted;
-//var privKeyObj;
+
+var privk_decrypt00;
+var privk_decrypt01;
+var test00;
+
 var funcdone = false;
 
 var messageBox = document.getElementById("mbody");
@@ -19,7 +22,7 @@ function setup_PGP(callback)
 	requirejs(['openpgp'], function (obj) {
 		openpgp = obj;
 		openpgp.config.aead_protect = true // activate fast AES-GCM mode (not yet OpenPGP standard)
-		//chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*"]});
+
 		callback();
 		funcdone  = true;
 		messageBox.value = "openpgp loaded";
@@ -33,25 +36,14 @@ function setup_PGP1()
 	requirejs(['openpgp'], function (obj) {
 		openpgp = obj;
 		openpgp.config.aead_protect = true // activate fast AES-GCM mode (not yet OpenPGP standard)
-		//chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*"]});
+
 		funcdone  = true;
 		messageBox.value = "openpgp loaded";
 	});
 }
 
-//var dummytest00 = 
-setup_PGP1();
+var dummytest00 = setup_PGP1();
 
-/*
-window.onload = function() {
-	messageBox.value = "testload";
-  setup_PGP(function () {});
-};
-
-document.addEventListener("DOMContentLoaded", function() {
-  you_function(...);
-});
-*/
 
 document.addEventListener("DOMContentLoaded", function() {
   setup_PGP(function () {});
@@ -66,8 +58,7 @@ function manencrypt() {
 		var messageText = messageBox.value;
 		
 		var options;
-		
-		//tpword = 'nmpassword0123';
+
 		
 		var privKeyObj;
 		
@@ -138,53 +129,7 @@ function testKeyGen()
 		tpword = messageBox.value;
 
 		messageBox.value = "setting up pgp...\n";
-
-		/*
-		//setup_PGP();
-		//let testpromise00 = setup_PGP().then(); //function (){});
-		let promise = setup_PGP();
-		promise.then();
-		*/
-	
-		/*
-		let myFirstPromise = new Promise((resolve, reject) => {
-  // We call resolve(...) when what we were doing asynchronously was successful, and reject(...) when it failed.
-  // In this example, we use setTimeout(...) to simulate async code. 
-  // In reality, you will probably be using something like XHR or an HTML5 API.
-  setTimeout(function(){
-    resolve("Success!"); // Yay! Everything went well!
-  }, 250);
-});
-
-myFirstPromise.then((successMessage) => {
-  // successMessage is whatever we passed in the resolve(...) function above.
-  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-  console.log("Yay! " + successMessage);
-});
-*/
-
-		/*
-		let promtest00 = new Promise((resolve, reject) => {
-		setup_PGP();});*/
 		
-		/*
-		var promtest00 = new Promise(function(resolve, reject){
-		setup_PGP();
-		if (true){
-			resolve("Y");
-		}
-		else {
-			reject(Error ("N"));
-		}
-		});*/
-		
-		//setup_PGP(function (){
-		//promtest00.then(function (){
-			
-			//messageBox.value = "done setting up pgp...\n";
-			
-			//openpgp.config.aead_protect = true // activate fast AES-GCM mode (not yet OpenPGP standard)
-
 
 			var options = {
 				userIds: [{ name:'NM_test_00'}], // multiple user IDs
@@ -196,13 +141,21 @@ myFirstPromise.then((successMessage) => {
 			openpgp.generateKey(options).then(function(newkey) {
 				privkey = newkey.privateKeyArmored; // '-----BEGIN PGP PRIVATE KEY BLOCK ... '
 				pubkey = newkey.publicKeyArmored;   // '-----BEGIN PGP PUBLIC KEY BLOCK ... '
+				test00 = newkey;
 			}).then(function()
 			{
 				messageBox.value = pubkey;
 				funcdone = true;
+				
+				var privKeyObj;
+		
+				privKeyObj = openpgp.key.readArmored(privkey).keys[0];
+				privKeyObj.decrypt(tpword);
+				
+				privk_decrypt00 = privKeyObj;
+				privk_decrypt01 = privKeyObj.privateKeyArmored;
 			});
-		//});
-		//messageBox.value = "testing...\n";
+		
 	}
 	else
 		messageBox.value = "function not complete\n";
@@ -217,15 +170,7 @@ function maniprkey()
 		funcdone = false;
 	
 		privkey = messageBox.value;
-		
-		/*
-		function (function () {})
-		{
-			
-		}
-		*/
 	
-		//should be callback
 		funcdone = true;
 	}
 	else
@@ -240,7 +185,6 @@ function manipbkey()
 	
 		pubkey = messageBox.value;
 	
-		//should be callback
 		funcdone = true;
 	}
 	else
