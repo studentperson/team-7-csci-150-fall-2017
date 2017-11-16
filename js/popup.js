@@ -63,17 +63,29 @@ function manencrypt()
 {
 	
 	var tmessage;
+	var tmss00;
 	
 	tmessage = "Hello world.";
+
+	//problem; this is not returning the value to the gemessage
+	//this is probably because it is asynchronous
+	//tmss00 = encryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
 	
-	gemessage = encryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
+	//gemessage = tmss00;
 	
+	encryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
+	.then(function(result) {
+		gemessage = result;
+	});
+
 	//messageBox.value = gemessage;
 }
 
 //function encryptm (privkey, pubkey, message)
 function encryptm (inp_privkobj, pubkey, message)
 {
+	return new Promise(function(resolve, reject) {
+	
 	if (funcdone)
 	{
 		funcdone = false;
@@ -119,16 +131,19 @@ function encryptm (inp_privkobj, pubkey, message)
 			messageBox.value = encrypted;
 			funcdone = true;
 			
-			gemessage = encrypted;
+			//gemessage = encrypted;
 			
 			//return encrypted;
+			
+			resolve(encrypted);
 			
 		});
 	}
 	else
 		messageBox.value = "function not complete\n";
 	
-	return encrypted;
+	});
+	//return encrypted;
 	
 }
 
@@ -138,7 +153,11 @@ function mandecrypt()
 	
 	tmessage = gemessage;
 	
-	gdmessage = decryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
+	//gdmessage = decryptm (gprivkeyobj, gkeyobj.publickey, tmessage);
+	decryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
+	.then(function(result) {
+		gdmessage = result;
+	});
 	
 	//messageBox.value = gdmessage;
 }
@@ -146,6 +165,7 @@ function mandecrypt()
 //function decryptm (privkey, pubkey, message)
 function decryptm (inp_privkobj, pubkey, message)
 {
+	return new Promise(function(resolve, reject) {
 	
 	if (funcdone)
 	{
@@ -181,13 +201,15 @@ function decryptm (inp_privkobj, pubkey, message)
 			messageBox.value = decrypted;			
 			funcdone = true;
 			
-			return decrypted;
+			//return decrypted;
+			resolve (decrypted);
 		});
 	}
 	else
 		messageBox.value = "function not complete\n";
 	
 	//return decrypted;
+	});
 }
 
 function testKeyGen() 
