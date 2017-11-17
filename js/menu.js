@@ -49,7 +49,10 @@ loginbtn.addEventListener("click", function() {
         if (isRegistering) {
             if (password.value == confirmpass.value) {
                 //regiser key to server and store login
-                isLoggedin = registerUsr(username.value, password.value);
+                registerUsr(username.value, password.value); //Asynchronous
+				timeI = 0;
+				loadTimeout = setTimeout(registerTimeout, 500);
+				return;
             }
             else {
                 error = "Passwords do not match"; //put into error div
@@ -58,20 +61,34 @@ loginbtn.addEventListener("click", function() {
         }
         else {
             //send to login check
-            isLoggedin = loginUsr(username.value, password.value);
+            success = loginUsr(username.value, password.value);
+			processLogin(success);
+			return;
         }
     }
     else {
         error = "Invalid Email"; //put into error div
     }
+	sendError(error);
+});
+
+//Callback function for processing login
+function processLogin(success)
+{
+	clearTimeout(loadTimeout);
+	isLoggedin = success;
     if (isLoggedin) {
+		Session.setItem("isLoggedIn", isLoggedin);
         loginform.style.display = "none";
         mainMenu.style.display = "block";
         header.style.display = "block";
         password.value = "";
-    }
-    sendError(error);
-});
+		error = "Success!";
+    } else {
+		error = "Invalid username or password";
+	}
+	sendError(error);
+}
 
 //////////Changes login to register//////////
 register.addEventListener("click", function() {
@@ -92,10 +109,15 @@ register.addEventListener("click", function() {
 //////////Logs user out//////////
 logout.addEventListener("click", function() {
     isLoggedin = false;
+	isRegistering = false;
+	loginbtn.setAttribute("value", "Login");
+	register.setAttribute("value", "Register");
+	Session.setItem("isLoggedIn", isLoggedin);
     //add logout function
     for(var x = 0; x < allforms.length; x++) allforms[x].style.display = "none";
     loginform.style.display = "block";
     sendError("");
+	chrome.extension.getBackgroundPage().User.logout();
 });
 
 //////////Opens the manual encryption input//////////
@@ -170,14 +192,16 @@ function loadPage(page) {
     else loginform.style.display = "block";
 }
 
-function registerUsr(username) {
-    var success = true;
-    return success;
+function registerUsr(username, password) {
+	User.register(username, password).then(processLogin);
 }
 
 function loginUsr(username, password) {
-    var success = true;
-    return success;
+	error = User.login(username, password);
+	if(error)
+		return false;
+	else
+		return true;
 }
 
 function encrypt(recipient, message) {//move to background
@@ -193,4 +217,38 @@ function decrypt(sender, message) {//move to background
 function sendError(error) {
     if (error) errorDiv.innerHTML = "<p>" + error + "</p>";
     else errorDiv.innerHTML = "";
+}
+
+onload = function()
+{
+	User = chrome.extension.getBackgroundPage().User;
+	Session = chrome.extension.getBackgroundPage().Session;
+	if(Session.getItem("isLoggedIn"))
+	{
+		isLoggedin = true;
+		loginform.style.display = "none";
+        mainMenu.style.display = "block";
+        header.style.display = "block";
+        password.value = "";
+	}
+}
+
+//Module references
+var User;
+var Session;
+
+//Timeout object(s)
+var loadTimeout;
+var timeI;
+
+function registerTimeout()
+{
+	if(timeI++ > 3)
+		timeI = 0;
+	var message = "Registering";
+	for(j = 0; j < timeI; j++)
+		message = " ." + message + ". ";
+	sendError(message);
+	
+	loadTimeout = setTimeout(registerTimeout, 100);
 }

@@ -19,16 +19,31 @@ document.oncontextmenu = function(e)
 /////////////Message requests///////////////
 ////////////////////////////////////////////
 
-//Send information for the requested message
+//Retrieves information about a message which is to be sent
 function context_retrieveMessage()
 {
 	var parentI5 = getParentOfClass(cm_clicked, "I5");
 	var messageID = parentI5.getAttribute("id");
-	var my_messageBody = getChildOfClass(parentI5, "Am Al editable LW-avf").textContent;
+	var my_messageBody = getChildOfClass(parentI5, "Am Al editable LW-avf").innerHTML;
 	var my_subject = getChildOfClass(parentI5, "aoD az6").children[0].value;
 	var my_recipients = getRecipientsFor(messageID);
 	
 	var messageObject = {type:"get_message", id:messageID, recipients:my_recipients, subject:my_subject, messageBody:my_messageBody};
+	chrome.runtime.sendMessage(messageObject);
+}
+
+//Retrieves information about a recieved message
+function context_retrieveMessage2()
+{
+	var messageBox = document.getElementsByClassName("ii gt adP adO")[0];
+	var message = messageBox.textContent;
+	
+	var senderBox = document.getElementsByClassName("go")[0];
+	var sender = senderBox.textContent;
+	
+	sender = sender.slice(1, sender.length-1);
+	
+	var messageObject = {type:"get_message2", id:null, sender:sender, messageBody:message};
 	chrome.runtime.sendMessage(messageObject);
 }
 
@@ -65,6 +80,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 		getChildOfClass(parentI5, "aoD az6").children[0].value = request.subject;
 		
 		//Do not edit recipients for now
-		
+	}
+	
+	if(request.type == "post_message2")
+	{
+		var messageBox = document.getElementsByClassName("ii gt adP adO")[0];
+		messageBox.innerHTML = request.messageBody;
 	}
 });
