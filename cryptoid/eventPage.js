@@ -13,12 +13,22 @@ chrome.contextMenus.onClicked.addListener(function(chooseText){
         var chosenText = chooseText.selectionText;
     
                 chrome.storage.sync.set({'mbody': chosenText}, function(){
+                    
        
             });
         }
 });
 
-chrome.storage.onChanged.addListener(function(changes, storageName){
-    chrome.browserAction.setBadgeText({"text": changes.mbody.newValue.toString()});
+chrome.storage.onChanged.addListener(function(changes){
+    if(chrome.browserAction.setBadgeText({"text": changes.mbody.newValue.toString()})){
+    
+        var notif = {
+            type: "basic",
+            iconUrl: "cryptoid128.png",
+            title: "Text copied",
+            message: "Text you highlighted is ready for encryption"
+            };
+            chrome.notifications.create('Notif', notif);
+    };
 });
 
