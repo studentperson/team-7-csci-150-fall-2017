@@ -16,6 +16,9 @@ var gstrpart00;
 var gstrpart01;
 var gstrpart02;
 var gstrtest00;
+var gstrtest01;
+var gstrtest02;
+var gstrtest03;
 var gindex00;
 var gindex01;
 
@@ -468,7 +471,10 @@ function mandecrypt()
 	var temail;
 	var tprivkeyobj00;
 	
-	tmessage = gemessage;
+	tmessage = "aaa\n";
+	
+	tmessage += gemessage;
+	tmessage += "bbb";
 	tprivkeyobj00 = gprivkeyobj00;
 	temail = "test";
 	
@@ -543,6 +549,7 @@ function maniprkey()
 
 //messageBox.value = "not in use";
 //messageBox.value = gkeyobj.privatekey;
+messageBox.value = gemessage;
 
 }
 
@@ -556,6 +563,9 @@ function manipbkey()
 	//-----END PGP PRIVATE KEY BLOCK-----
 	//-----BEGIN PGP PUBLIC KEY BLOCK-----
 	//-----END PGP PUBLIC KEY BLOCK-----
+	//-----BEGIN PGP MESSAGE-----
+	//-----END PGP MESSAGE-----
+	//also end has an additional \n
 	var inp_str, part0, part1, part2, temp;
 	var dumb00, dumb01;
 	var index0, index1;
@@ -571,26 +581,18 @@ function manipbkey()
 	dumb01 = "bbb";
 	inp_str = dumb00+nmstuff00.privatekey+dumb01;
 	
-	gstrtest00 = inp_str;
-	
 	index0 = inp_str.indexOf(delim0);
-	
-	//temp = inp_str.substring(index0+delim0.length-1, inp_str.length-1);
-	temp = inp_str.substring(index0+delim0.length, inp_str.length);
-	index1 = temp.indexOf(delim1);
-	
-	gindex00 = index0;
-	gindex01 = index1;
 	
 	part0 = inp_str.substring(0, index0);
 	temp = inp_str.substring(index0, inp_str.length);
 	
-	part1 = temp.substring(index0, index1+delim1.length);
-	//part2 = temp.substring(index1+delim1.length-1, temp.length-1);
-	part2 = temp.substring(index1+delim1.length, temp.length);
-	gstrpart00 = part0;
-	gstrpart01 = part1;
-	gstrpart02 = part2;
+	index1 = temp.indexOf(delim1) + delim1.length;
+	
+	part1 = temp.substring(0, index1);
+	part2 = temp.substring(index1, temp.length);
+	
+	//NOTE: technically there is white space at end of key
+		//\n in this case gets to be part of part2
 }
 
 //get the private key object

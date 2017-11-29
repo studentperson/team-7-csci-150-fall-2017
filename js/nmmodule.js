@@ -17,6 +17,7 @@ var gprivkeyobj;
 
 include("js/get_pubkey.js");
 include("js/Cache.js");
+include("js/Keyserver.js");
 
 ////////////////////////////////////////////
 //////////////Include Utility///////////////
@@ -202,27 +203,29 @@ nmmodule.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 	return new Promise(function(resolve, reject) {
 		
 	//split string into 3 parts
-	var mess_part1, mess_part2, mess_part3;
-	mess_part1 = "";
-	mess_part2 = "";
-	mess_part3 = "";
+	var part0, part1, part2, temp_part;
+	var index0, index1;
+	var delim0, delim1;
+	
+	delim0 = '-----BEGIN PGP MESSAGE-----';
+	delim1 = '-----END PGP MESSAGE-----';
+	
+	index0 = inp_message.indexOf(delim0);
+	part0 = inp_message.substring(0, index0);
+	temp_part = inp_message.substring(index0, inp_message.length);
+	index1 = temp_part.indexOf(delim1) + delim1.length;
+	part1 = temp_part.substring(0, index1);
+	part2 = temp_part.substring(index1, temp_part.length);
+
 	get_pubkey.testasync().then(function(result) {
 		//result doesn't do anything don't have access to internet
 		if (true)
 		{	
-			//need temp keys to test
-			//m1 is stuff before encrypt message
-			//m2 is mess
-			//m3 is stuff after
-			//(inp_privkobj, pubkey, message)
-			//(inp_privkobj, pubkey, message)
-			//nmmodule.decryptm(inp_privkobj, result, mess_part2).then(function (result2) {
-			nmmodule.decryptm(inp_privkobj, result, inp_message).then(function (result2) {
-				mess_part1 += "\n" + result2;
-				mess_part1 += "\n" + mess_part3;
-				resolve (mess_part1);
+			nmmodule.decryptm(inp_privkobj, result, part1).then(function (result2) {
+				part0 += "\n" + result2;
+				part0 += "\n" + part2;
+				resolve (part0);
 			});
-			//nmmodule.decryptm = function (inp_privkobj, pubkey, message)
 		}
 		else
 		{
