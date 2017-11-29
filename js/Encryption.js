@@ -1,5 +1,5 @@
 //Defining module
-var nmmodule = new Object();
+var Encryption = new Object();
 var gkeyserver = 'http://192.241.239.122:8888';
 
 var includeList00 = new Array();
@@ -33,7 +33,7 @@ function include(file)
 
 //This opens script file from directory of the calling script
 //Then converts it to an object
-nmmodule.setup_PGP1 = function ()
+Encryption.setup_PGP1 = function ()
 {
 	//Loads code for OpenPGP functionality
 	requirejs(['openpgp'], function (obj) {
@@ -44,7 +44,7 @@ nmmodule.setup_PGP1 = function ()
 
 //This is a subfunction that directly receive the private key object, public key, and the message
 //It then uses these elements to encrypt the message
-nmmodule.encryptm = function (inp_privkobj, pubkey, message)
+Encryption.encryptm = function (inp_privkobj, pubkey, message)
 {
 	//Treating function as asynchronous in case needed later
 	return new Promise(function(resolve, reject) {
@@ -71,7 +71,7 @@ nmmodule.encryptm = function (inp_privkobj, pubkey, message)
 
 //This is a subfunction that directly receive the private key object, public key, and the message
 //It then uses these elements to decrypt the message
-nmmodule.decryptm = function (inp_privkobj, pubkey, message)
+Encryption.decryptm = function (inp_privkobj, pubkey, message)
 {
 	//Treating function as asynchronous in case needed later
 	return new Promise(function(resolve, reject) {
@@ -99,7 +99,7 @@ nmmodule.decryptm = function (inp_privkobj, pubkey, message)
 
 //This takes an email and a password and generates a key pair
 //The key pair is an object with element privatekey, publickey
-nmmodule.generateKeypair = function (inp_email, pword)
+Encryption.generateKeypair = function (inp_email, pword)
 {
 	//The function is asynchronous, handling async as a promise
 	return new Promise(function(resolve, reject) {
@@ -137,7 +137,7 @@ nmmodule.generateKeypair = function (inp_email, pword)
 //It then calls encryptm to pass the message, object, and public key for encryption
 //It then returns the encrypted message
 //It does write to the cache
-nmmodule.encryptMessage = function(inp_message, inp_privkobj, inp_email)
+Encryption.encryptMessage = function(inp_message, inp_privkobj, inp_email)
 {
 	//The function is asynchronous, handling async as a promise
 	return new Promise(function(resolve, reject) {
@@ -162,7 +162,7 @@ nmmodule.encryptMessage = function(inp_message, inp_privkobj, inp_email)
 					Cache.write(inp_email, result);
 					
 					//encrypt message and return string result
-					nmmodule.encryptm(inp_privkobj, result, inp_message).then(function(result2){
+					Encryption.encryptm(inp_privkobj, result, inp_message).then(function(result2){
 						resolve (result2);
 					});
 					
@@ -173,7 +173,7 @@ nmmodule.encryptMessage = function(inp_message, inp_privkobj, inp_email)
 		else //if public key is found
 		{
 			//encrypt message and return string result
-			nmmodule.encryptm(inp_privkobj, temp_pub_key, inp_message).then(function(result2){
+			Encryption.encryptm(inp_privkobj, temp_pub_key, inp_message).then(function(result2){
 					resolve (result2);
 			});
 		}
@@ -187,7 +187,7 @@ nmmodule.encryptMessage = function(inp_message, inp_privkobj, inp_email)
 //It then calls encryptm to pass the message, object, and public key for decryption
 //It then returns the encrypted message
 //It does write to the cache
-nmmodule.decryptMessage = function(inp_message, inp_privkobj, inp_email)
+Encryption.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 {
 	//The function is asynchronous, handling async as a promise
 	return new Promise(function(resolve, reject) {
@@ -231,7 +231,7 @@ nmmodule.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 					Cache.write(inp_email, result);
 					
 					//if it is in the server then decrypt the message
-					nmmodule.decryptm(inp_privkobj, result, part1).then(function (result2) {
+					Encryption.decryptm(inp_privkobj, result, part1).then(function (result2) {
 						
 						//reassemble the parts and return the full message
 						part0 += "\n" + result2;
@@ -245,7 +245,7 @@ nmmodule.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 		}
 		else //if the key is in the cache
 		{
-			nmmodule.decryptm(inp_privkobj, temp_pub_key, part1).then(function (result2) {
+			Encryption.decryptm(inp_privkobj, temp_pub_key, part1).then(function (result2) {
 					
 					//reassemble the parts and return the full message
 					part0 += "\n" + result2;
@@ -261,7 +261,7 @@ nmmodule.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 
 //this takes the private key and password
 //and passes back a decrypted key object
-nmmodule.decryptPrivateKey = function (inp_privkey, inp_pword)
+Encryption.decryptPrivateKey = function (inp_privkey, inp_pword)
 {
 	var privKeyObj;
 	privKeyObj = openpgp.key.readArmored(inp_privkey).keys[0];
