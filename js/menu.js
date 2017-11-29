@@ -160,7 +160,7 @@ function loadPage(page) {
         else allforms[i].style.display = "none";
     }
     //check if logged in
-    if (isLoggedin) {
+    if (true) {
         if (page == "") {
             mainMenu.style.display = "block";
         }
