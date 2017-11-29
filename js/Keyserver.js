@@ -78,12 +78,3 @@ Keyserver.checkEmailAvailable = function (userEmail, keyServer, callback) {
   };
   xhr.send(null);
 }
-
-function verify_email(message) {
-  var decoded = message.replace(/=3D/g, '=').replace(/=\s*$/m, '');
-  var beginUrl = decoded.slice(decoded.search('http'), -1);
-  var match = beginUrl.match(/[^\r\n]+/g);
-  var url = match[0] + match[1];  
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', url, true);
-}

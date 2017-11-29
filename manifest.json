@@ -16,7 +16,7 @@
 },
 
 	"background": {"page": "background.html"},
-	
+
 	"content_scripts": [
 		{
 			"matches": ["https://mail.google.com/mail/*"],
@@ -26,6 +26,7 @@
 
   	// Add any of these that we need or remove what we don’t need
 	"permissions": [
+		"storage",
 	"activeTab",
 	"identity",
 	"clipboardRead",
