@@ -4,7 +4,7 @@ var gprivkey;
 var gpubkey;
 var gpword;
 var gemessage;
-var gdmessage;
+var gdmessage = "";
 var gkeyobj;
 var gemail;
 var gprivkeyobj;
@@ -391,7 +391,7 @@ var messageBox = document.getElementById("mbody");
 
 var includeList = new Array();
 
-include("js/nmmodule.js");
+include("js/Encryption.js");
 
 ////////////////////////////////////////////
 //////////////Include Utility///////////////
@@ -436,7 +436,7 @@ function manencrypt()
 	
 	tmessage = "Hello world.";
 	
-	nmmodule.encryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
+	Encryption.encryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
 	.then(function(result) {
 		gemessage = result;
 	});
@@ -450,16 +450,23 @@ function manencrypt()
 	var tmss00;
 	var tprivkeyobj00;
 	
-	tmessage = "Hello world.";
-	trecipient = "test";
-	tprivkeyobj00 = gprivkeyobj;
-	
-	//(inp_message, inp_privkobj, inp_recipient)
-	nmmodule.encryptMessage (tmessage, gprivkeyobj, trecipient)
+	tmessage = "Hello world."+gdmessage;
+	trecipient = "someone@example.com";
+	tprivkeyobj00 = gprivkeyobj01;
+
+	Encryption.encryptMessage (tmessage, tprivkeyobj00, trecipient)
 	.then(function(result) {
 		gemessage = result;
 	});
-	/*nmmodule.encryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
+	
+	/*
+	//(inp_message, inp_privkobj, inp_recipient)
+	Encryption.encryptMessage (tmessage, gprivkeyobj, trecipient)
+	.then(function(result) {
+		gemessage = result;
+	});
+	*/
+	/*Encryption.encryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
 	.then(function(result) {
 		gemessage = result;
 	});*/
@@ -476,36 +483,43 @@ function mandecrypt()
 	tmessage += gemessage;
 	tmessage += "bbb";
 	tprivkeyobj00 = gprivkeyobj00;
-	temail = "test";
+	temail = "someone@example.com";
+	
+	Encryption.decryptMessage (tmessage, tprivkeyobj00, temail)
+	.then(function(result) {
+		gdmessage = result;
+	});
 	
 	/*
-	nmmodule.decryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
+	Encryption.decryptm (gprivkeyobj, gkeyobj.publickey, tmessage)
 	.then(function(result) {
 		gdmessage = result;
 	});
 	*/
 	/*
 	//This works
-	nmmodule.decryptm (gprivkeyobj00, gkeyobj.publickey, tmessage)
+	Encryption.decryptm (gprivkeyobj00, gkeyobj.publickey, tmessage)
 	.then(function(result) {
 		gdmessage = result;
 	});
 	*/
 	/*
 	//This works too
-	nmmodule.decryptm (gprivkeyobj00, nmstuff00.publickey, tmessage)
+	Encryption.decryptm (gprivkeyobj00, nmstuff00.publickey, tmessage)
 	.then(function(result) {
 		gdmessage = result;
 	});
 	*/
 	
+	/*
 	//(inp_message, inp_privkobj, inp_email)
 	//(tmessage, tprivkeyobj00, temail)
 	//This is working
-	nmmodule.decryptMessage (tmessage, tprivkeyobj00, temail)
+	Encryption.decryptMessage (tmessage, tprivkeyobj00, temail)
 	.then(function(result) {
 		gdmessage = result;
 	});
+	*/
 	
 }
 
@@ -521,14 +535,14 @@ function testKeyGen()
 	
 	messageBox.value = "generating keys...";
 	
-	nmmodule.generateKeypair (temail00, tpword00)
+	Encryption.generateKeypair (temail00, tpword00)
 	.then(function(result) {
 	
 		messageBox.value = "keys generated";
 		gkeyobj = result;
 		
 		messageBox.value = "decrypting key...";
-		gprivkeyobj = nmmodule.decryptPrivateKey (gkeyobj.privatekey, gpword);
+		gprivkeyobj = Encryption.decryptPrivateKey (gkeyobj.privatekey, gpword);
 		messageBox.value = "key decrypted";
 		/*
 		messageBox.value = "testing encryption...";
@@ -602,11 +616,11 @@ function manipw()
 	{
 		funcdone = false;
 	
-		//gprivkeyobj = nmmodule.decryptPrivateKey (gkeyobj.privatekey, gpword);
-		gprivkeyobj00 = nmmodule.decryptPrivateKey (nmstuff00.privatekey, nmstuff00.pword);
-		gprivkeyobj01 = nmmodule.decryptPrivateKey (nmstuff01.privatekey, nmstuff01.pword);
-		//gprivkeyobj = nmmodule.decryptPrivateKey ();
-		//gprivkeyobj00 = nmmodule.decryptPrivateKey ("a", "b");
+		//gprivkeyobj = Encryption.decryptPrivateKey (gkeyobj.privatekey, gpword);
+		gprivkeyobj00 = Encryption.decryptPrivateKey (nmstuff00.privatekey, nmstuff00.pword);
+		gprivkeyobj01 = Encryption.decryptPrivateKey (nmstuff01.privatekey, nmstuff01.pword);
+		//gprivkeyobj = Encryption.decryptPrivateKey ();
+		//gprivkeyobj00 = Encryption.decryptPrivateKey ("a", "b");
 	
 		//should be callback
 		funcdone = true;

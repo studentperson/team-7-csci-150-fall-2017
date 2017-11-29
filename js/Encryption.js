@@ -1,4 +1,6 @@
 //Defining module
+//This should be a fully working version now
+	//not 100% sure but 99% sure
 var Encryption = new Object();
 var gkeyserver = 'http://192.241.239.122:8888';
 
@@ -67,6 +69,7 @@ Encryption.encryptm = function (inp_privkobj, pubkey, message)
 			//Text passed back
 			resolve(encrypted);	
 		});
+	});
 }
 
 //This is a subfunction that directly receive the private key object, public key, and the message
@@ -147,7 +150,7 @@ Encryption.encryptMessage = function(inp_message, inp_privkobj, inp_email)
 		temp_pub_key = Cache.find(inp_email);
 
 		//if not public key not found in cache
-		if (temp_pub_key.length < 1)
+		if (temp_pub_key == null)
 		{
 			//search for key on key server
 			Keyserver.getPublicKey (inp_email, gkeyserver, function (result) {
@@ -216,7 +219,7 @@ Encryption.decryptMessage = function(inp_message, inp_privkobj, inp_email)
 		temp_pub_key = Cache.find(inp_email);
 		
 		//if the key is not found in the cache
-		if (temp_pub_key.length < 1)
+		if (temp_pub_key == null)
 		{
 			//search the key server
 			Keyserver.getPublicKey (inp_email, gkeyserver, function (result) {
