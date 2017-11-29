@@ -1,6 +1,9 @@
+var Keyserver = new Object();
+
 // Input - Armored Public Key, Keyserver
 // Output - Boolean callback
-function uploadKey(pubKey, keyServer, callback) {
+//function uploadKey(pubKey, keyServer, callback) {
+Keyserver.uploadKey = function (pubKey, keyServer, callback) {
   var payload = { 'publicKeyArmored': pubKey };
   var string_payload = JSON.stringify(payload);
   var xhr = new XMLHttpRequest();
@@ -20,7 +23,8 @@ function uploadKey(pubKey, keyServer, callback) {
 
 // Input: User Email, Keyserver address, callback function
 // Output: Callback returns string of armored public key
-function getPublicKey(userEmail, keyServer, callback) {
+//function getPublicKey(userEmail, keyServer, callback) {
+Keyserver.getPublicKey = function (userEmail, keyServer, callback) {
   var retrieveAPI = '/api/v1/key?email=';
   var request = keyServer.concat(retrieveAPI, userEmail);
   var xhr = new XMLHttpRequest();
@@ -51,7 +55,7 @@ function getPublicKey(userEmail, keyServer, callback) {
 // reg_checkEmailAvailable(userEmail, keyServer, function(responseBool){
 //   console.log(responseBool)
 // });
-function reg_checkEmailAvailable(userEmail, keyServer, callback) {
+Keyserver.checkEmailAvailable = function (userEmail, keyServer, callback) {
   var retrieveAPI = '/api/v1/key?email=';
   var request = keyServer.concat(retrieveAPI, userEmail);
   var xhr = new XMLHttpRequest();
