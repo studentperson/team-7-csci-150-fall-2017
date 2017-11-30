@@ -90,7 +90,6 @@ manBody.addEventListener("change", function() {
 })
 
 function login(){
-  console.log("logging in");
     var isLoggedin = true;
     chrome.storage.sync.set({"loggedin" : isLoggedin}, function() {
         if (chrome.runtime.error) {
@@ -165,6 +164,11 @@ logout.addEventListener("click", function() {
     for(var x = 0; x < allforms.length; x++) allforms[x].style.display = "none";
     loginform.style.display = "block";
     sendError("");
+    chrome.storage.sync.set({"loggedin" : isLoggedin}, function() {
+        if (chrome.runtime.error) {
+            console.log("Runtime error.");
+        }
+    });
 });
 
 //////////Opens the manual encryption input//////////
