@@ -20,9 +20,11 @@ document.oncontextmenu = function(e)
 ////////////////////////////////////////////
 
 //Retrieves information about a message which is to be sent
-function context_retrieveMessage()
+function context_retrieveOutgoing()
 {
-	var parentI5 = getParentOfClass(cm_clicked, "I5");
+	var parentI5 = document.getElementsByClassName("I5")[0];
+	var messageID = null;	
+	//var parentI5 = getParentOfClass(cm_clicked, "I5");
 	var messageID = parentI5.getAttribute("id");
 	var my_messageBody = getChildOfClass(parentI5, "Am Al editable LW-avf").innerHTML;
 	var my_subject = getChildOfClass(parentI5, "aoD az6").children[0].value;
@@ -33,7 +35,7 @@ function context_retrieveMessage()
 }
 
 //Retrieves information about a recieved message
-function context_retrieveMessage2()
+function context_retrieveIncoming()
 {
 	var messageBox = document.getElementsByClassName("ii gt adP adO")[0];
 	var message = messageBox.textContent;
@@ -44,6 +46,15 @@ function context_retrieveMessage2()
 	sender = sender.slice(1, sender.length-1);
 	
 	var messageObject = {type:"get_message2", id:null, sender:sender, messageBody:message};
+	chrome.runtime.sendMessage(messageObject);
+}
+
+function getEmail()
+{
+	var messageBox = document.getElementsByClassName("ii gt adP adO")[0];
+	var message = messageBox.textContent;
+	
+	var messageObject = {type:"getEmail", id:null, sender:null, messageBody:message};
 	chrome.runtime.sendMessage(messageObject);
 }
 
@@ -75,7 +86,8 @@ function getRecipientsFor(id)
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	if(request.type == "post_message")
 	{
-		var parentI5 = document.getElementById(request.id);
+		//var parentI5 = document.getElementById(request.id);
+		var parentI5 = document.getElementsByClassName("I5")[0];
 		getChildOfClass(parentI5, "Am Al editable LW-avf").textContent = request.messageBody;
 		getChildOfClass(parentI5, "aoD az6").children[0].value = request.subject;
 		

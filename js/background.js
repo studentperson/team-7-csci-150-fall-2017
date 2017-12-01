@@ -47,8 +47,6 @@ function include(file)
 	var tag = document.createElement("script");
 	tag.src = file;
 	document.head.appendChild(tag);
-	
-	alert(file);
 }
 
 ////////////////////////////////////////////
@@ -56,7 +54,7 @@ function include(file)
 ////////////////////////////////////////////
 function sendEncrypt(obj)
 {
-	chrome.tabs.executeScript({code:"context_retrieveMessage()"});
+	chrome.tabs.executeScript({code:"context_retrieveOutgoing()"});
 }
 
 function sendDecrypt(obj)
@@ -66,7 +64,7 @@ function sendDecrypt(obj)
 		alert("You are not logged in!");
 	}
 	
-	chrome.tabs.executeScript({code:"context_retrieveMessage2()"});
+	chrome.tabs.executeScript({code:"context_retrieveIncoming()"});
 }
 
 function login()
@@ -118,7 +116,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			//id - String: A unique identifier for this message
 			//recipients - Array of Strings: All intended recipients
 			//subject - String: The subject of the message
-			//messageBody - String: The body of the message'
+			//messageBody - String: The body of the message
+			
 			var newMessageBody = "Subject: " + request.subject + "<br><br>Body: " + request.messageBody;
 			var recip_pubkey = Cache.find(request.recipients[0]);
 			
@@ -130,7 +129,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			openpgp.encrypt(options).then(function(ciphertext)
 			{
 				var newSubject = "Encrypted with Cryptoid Mail";
-				
 				var messageObject = {type:"post_message", id:request.id, recipients:request.recipients, subject:newSubject, messageBody:ciphertext.data};
 				chrome.tabs.query({active:true, currentWindow:true}, function(tabs) {
 					chrome.tabs.sendMessage(tabs[0].id, messageObject);
@@ -139,11 +137,12 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			
 		break;
 		
+		case "getEmail":
+			getEmail_data = request.messageBody;
+		break;
+		
 		case "get_message2":
 			var message = request.messageBody;
-			
-			//privKeyObj = openpgp.key.readArmored(privkey).keys[0];
-			//privKeyObj.decrypt("password1");
 			
 			message = openpgp.message.readArmored(message);
 			
@@ -174,8 +173,8 @@ function populateContexts()
 		return;
 	
 	contexts_populated = true;
-	chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*", "https://mg.mail.yahoo.com/*"]});
-	chrome.contextMenus.create({id:"decrypt", title:"Decrypt", onclick:sendDecrypt, documentUrlPatterns:["https://mail.google.com/mail/*"]});
+	chrome.contextMenus.create({id:"encrypt", title:"Encrypt", onclick:sendEncrypt, contexts:["editable"], documentUrlPatterns:["https://mail.google.com/mail/*", "https://mail.yahoo.com/*"]});
+	chrome.contextMenus.create({id:"decrypt", title:"Decrypt", onclick:sendDecrypt, documentUrlPatterns:["https://mail.google.com/mail/*", "https://mail.yahoo.com/*"]});
 }
 
 function depopulateContexts()
@@ -186,6 +185,51 @@ function depopulateContexts()
 	contexts_populated = false;
 	chrome.contextMenus.remove("encrypt");
 	chrome.contextMenus.remove("decrypt");
+}
+
+var getEmail_data = null;
+
+function getEmail()
+{
+	return new Promise(function(resolve, reject)
+	{
+		chrome.tabs.executeScript({code:"getEmail()"});
+		
+		var tout = function()
+		{
+			var result = getEmail_data;
+			if(result)
+			{
+				resolve(result);
+				getEmail_data = null;
+			} else
+				setTimeout(tout, 1);
+		};
+		
+		setTimeout(tout, 1);
+	});
+}
+
+function testGetEmail()
+{
+	getEmail().then(function(data)
+	{
+		alert(data);
+	});
+}
+
+function verifyRegistration()
+{
+	Keyserver.getPublicKey(User.email, 'http://192.241.239.122:8888', function(data)
+	{
+		alert("!");
+		alert(data);
+		if(pubkey == data)
+			alert("true");
+	
+		getPopup().isLoggedin = true;
+		getPopup().loadPage("main_menu");
+	});
 }
 
 setup_PGP();

@@ -2,31 +2,23 @@ var User = new Object();
 
 User.register = function(email, pword)
 {
-	return new Promise(function(resolve, reject)
-	{
-		Encryption.generateTestPair(email, pword).then(function()
+	return Encryption.generateKeypair(email, pword).then(function(key) {
+		User.savePrivate(key.privatekey);
+		User.savePublic(key.publickey);
+		pubkey = key.publickey;
+		User.email = email;
+		
+		privkey = openpgp.key.readArmored(key.privatekey).keys[0];
+		privkey.decrypt(pword);
+		
+		if(privkey.primaryKey.isDecrypted)
 		{
-			resolve(true);
-		});
-	});
-	
-	/*return Encryption.generateKeypair(email, pword).then(function(key) {
-		//Save private key
-		User.savePrivate(key.privkey);
-		
-		//Save public key
-		User.savePublic(key.pubkey);
-		
-		//Upload public key to keyserver
-		return Keyserver.uploadPublicKey(email, key.pubkey).then(function() {
-			//Upload success, Login user
-			return User.login(email, pword);
-		}, function() {
-			//Upload failed
-			return "Key upload failed";
+			Keyserver.uploadKey(key.publickey, 'http://192.241.239.122:8888', function(data)
+			{
+				return(true);
+			});
 		}
-		);
-	});*/
+	});
 }
 
 User.login = function(email, pword)
@@ -42,7 +34,8 @@ User.login = function(email, pword)
 	privkey = openpgp.key.readArmored(privkey_enc).keys[0];
 	privkey.decrypt(pword);
 	
-	if(privkey.primaryKey.isDecrypted)	 {
+	if(privkey.primaryKey.isDecrypted)
+	{
 		User.email = email;
 		populateContexts();
 		return 0;

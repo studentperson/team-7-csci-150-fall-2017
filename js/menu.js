@@ -13,6 +13,8 @@ var selInputDiv = document.getElementById("selInputDiv");
 allforms.push(selInputDiv);
 var header = document.getElementById("header");
 allforms.push(header);
+var verify = document.getElementById("verifyEmail");
+allforms.push(verify);
 var errorDiv = document.getElementById("error");
 //get buttons
 var loginbtn = document.getElementById("loginbtn");
@@ -25,6 +27,7 @@ var selEntry = document.getElementById("selEntry");
 var home = document.getElementById("home");
 var manEncrypt = document.getElementById("encrypt");
 var manDecrypt = document.getElementById("decrypt");
+var verifyEmail = document.getElementById("verify");
 //get inputs
 var username = document.getElementById("usrname");
 var password = document.getElementById("password");
@@ -40,6 +43,71 @@ home.addEventListener("click", function() {
     loadPage("main_menu");
     sendError("");
 });
+
+chrome.storage.sync.get("username", function(data) {
+    if (!chrome.runtime.error && data.username) {
+        username.setAttribute("value", data.username)
+    }
+});
+chrome.storage.sync.get("loggedin", function(data) {
+    if (!chrome.runtime.error && data.loggedin == true) {
+        isLoggedin = data.loggedin;
+        loadPage("main_menu");
+    }
+});
+chrome.storage.sync.get("manBody", function(data) {
+    if (!chrome.runtime.error && data.manBody) {
+        manBody.value = data.manBody;
+    }
+});
+chrome.storage.sync.get("pageid", function(data) {
+    if (!chrome.runtime.error && data.pageid) {
+        loadPage(data.pageid);
+    }
+});
+
+    // chrome.storage.sync.get("manBody", function(data) {
+    //     if (!chrome.runtime.error && data.manBody) {
+    //         manBody.setAttribute("value", data.manBody)
+    //     }
+    // });
+
+
+
+username.addEventListener("change", function() {
+    var d = username.value;
+    chrome.storage.sync.set({"username" : d}, function() {
+        if (chrome.runtime.error) {
+            console.log("Runtime error.")
+        }
+    });
+})
+manBody.addEventListener("change", function() {
+    var d = manBody.value;
+    chrome.storage.sync.set({"manBody" : d}, function() {
+        if (chrome.runtime.error) {
+            console.log("Runtime error.")
+        }
+    });
+})
+
+function login(){
+    var isLoggedin = true;
+    chrome.storage.sync.set({"loggedin" : isLoggedin}, function() {
+        if (chrome.runtime.error) {
+            console.log("Runtime error.");
+        }
+    });
+}
+
+// manBody.addEventListener("change", function() {
+//     var d = manBody.value;
+//     chrome.storage.sync.set({"manBody" : d}, function() {
+//         if (chrome.runtime.error) {
+//             console.log("Runtime error.")
+//         }
+//     });
+// })
 
 //////////Logs in, basic check for valid email send password and email//////////
 loginbtn.addEventListener("click", function() {
@@ -76,16 +144,19 @@ loginbtn.addEventListener("click", function() {
 function processLogin(success)
 {
 	clearTimeout(loadTimeout);
-	isLoggedin = success;
-    if (isLoggedin) {
-		Session.setItem("isLoggedIn", isLoggedin);
-        loginform.style.display = "none";
-        mainMenu.style.display = "block";
-        header.style.display = "block";
-        password.value = "";
-		error = "Success!";
-    } else {
-		error = "Invalid username or password";
+	if(isRegistering)
+	{
+		loadPage("verifyEmail");
+		error = "";
+	} else {
+		isLoggedin = success;
+		chrome.storage.sync.set({"loggedin": isLoggedin});
+		if (isLoggedin) {
+			loadPage("main_menu");
+			error = "Welcome, " + User.email;
+		} else {
+			error = "Invalid username or password";
+		}
 	}
 	sendError(error);
 }
@@ -109,15 +180,16 @@ register.addEventListener("click", function() {
 //////////Logs user out//////////
 logout.addEventListener("click", function() {
     isLoggedin = false;
-	isRegistering = false;
-	loginbtn.setAttribute("value", "Login");
-	register.setAttribute("value", "Register");
-	Session.setItem("isLoggedIn", isLoggedin);
+	password.value = "";
     //add logout function
     for(var x = 0; x < allforms.length; x++) allforms[x].style.display = "none";
     loginform.style.display = "block";
     sendError("");
-	chrome.extension.getBackgroundPage().User.logout();
+    chrome.storage.sync.set({"loggedin" : isLoggedin}, function() {
+        if (chrome.runtime.error) {
+            console.log("Runtime error.");
+        }
+    });
 });
 
 //////////Opens the manual encryption input//////////
@@ -149,9 +221,7 @@ selectbtn.addEventListener("click", function() {
 //////////-----Add code to detect-----//////////
 detect.addEventListener("click", function() {
     //detect the email body and recipient and encrypt or call function----replace values
-    var recipient = "email@recipient.thing";
-    var message = "Replace me with email body";
-    var encrypted = encrypt(recipient, message);
+	chrome.tabs.executeScript({code:"context_retrieveOutgoing()"});
     sendError("");
 });
 
@@ -170,27 +240,6 @@ selEntry.addEventListener("click", function(){
         sendError("Invalid Email");
     }
 });
-
-
-//////////Loads page baised on page ID//////////
-//if empty string just goes to home (login before calling)
-function loadPage(page) {
-    for (var i in allforms) {
-        if (page == allforms[i].id && isLoggedin) {
-            allforms[i].style.display = "block";
-        }
-        else allforms[i].style.display = "none";
-    }
-    //check if logged in
-    if (isLoggedin) {
-        if (page == "") {
-            mainMenu.style.display = "block";
-        }
-        header.style.display = "block";
-        selectbtn.style.display = "block";
-    }
-    else loginform.style.display = "block";
-}
 
 function registerUsr(username, password) {
 	User.register(username, password).then(processLogin);
@@ -218,24 +267,57 @@ function sendError(error) {
     if (error) errorDiv.innerHTML = "<p>" + error + "</p>";
     else errorDiv.innerHTML = "";
 }
-
-onload = function()
-{
-	User = chrome.extension.getBackgroundPage().User;
-	Session = chrome.extension.getBackgroundPage().Session;
-	if(Session.getItem("isLoggedIn"))
-	{
-		isLoggedin = true;
-		loginform.style.display = "none";
-        mainMenu.style.display = "block";
+//////////Save page/////////
+function savePage(page) {
+	
+	chrome.storage.sync.set({'pageid':page});
+	/*
+    for (var i in allforms) {
+      if (allforms[i].style.display == "block") {
+        console.log(allforms[i].id);
+        if (allforms[i].id != "header") {
+          chrome.storage.sync.set({"pageid" : allforms[i].id}, function() {
+              if (chrome.runtime.error) {
+                  console.log("Runtime error.")
+              }
+          });
+        }
+      }
+    }*/
+}
+//////////Loads page baised on page ID//////////
+//if empty string just goes to home (login before calling)
+function loadPage(page) {
+	var logToken = isLoggedin || (page == "verifyEmail");
+	
+    for (var i in allforms) {
+        if (page == allforms[i].id && logToken) {
+            allforms[i].style.display = "block";
+        }
+        else allforms[i].style.display = "none";
+    }
+	
+    //check if logged in
+    if (logToken) {
+        if (page == "") {
+            mainMenu.style.display = "block";
+        }
         header.style.display = "block";
-        password.value = "";
-	}
+        selectbtn.style.display = "block";
+    }
+    else loginform.style.display = "block";
+	
+	savePage(page);
 }
 
+
+
+
 //Module references
-var User;
-var Session;
+var User = chrome.extension.getBackgroundPage().User
+var Keyserver = chrome.extension.getBackgroundPage().Keyserver;
+var Encryption = chrome.extension.getBackgroundPage().Encryption;
+var openpgp = chrome.extension.getBackgroundPage().openpgp;
 
 //Timeout object(s)
 var loadTimeout;
@@ -252,3 +334,20 @@ function registerTimeout()
 	
 	loadTimeout = setTimeout(registerTimeout, 100);
 }
+
+//Registration confirm page
+verifyEmail.addEventListener("click", function()
+{
+	chrome.extension.getBackgroundPage().getEmail().then(function(message)
+	{
+		message = openpgp.message.readArmored(message);
+		var options = {
+			message: message,
+			privateKey: chrome.extension.getBackgroundPage().privkey
+		};
+
+		openpgp.decrypt(options).then(function(plaintext) {
+			Keyserver.verify_email(plaintext.data);
+		});
+	});
+});
